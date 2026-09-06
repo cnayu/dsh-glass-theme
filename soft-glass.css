@@ -503,3 +503,17 @@ body .YyYd_a_save,
 body .YyYd_a_discard { font-weight: 500; }
 
 body .pbvGtq_tab[data-active="true"] { font-weight: 600; }
+
+/* ---------- 16. 可读性增强 (壁纸/视频上层文字) ----------
+   背景为视频/图片时文字需要更重更清晰: 聊天列与侧栏默认字重
+   提升一档 (400→500, 经继承生效, 不覆盖应用显式字重), 并加轻
+   描边提高与 busy 背景的对比; 深色模式用暗色描边。 */
+body .pI_x6G_centerCol,
+body .pI_x6G_sidebarCol { font-weight: 500; letter-spacing: 0.01em; }
+body .pI_x6G_centerCol { text-shadow: 0 1px 2px rgba(255,255,255,0.38); }
+body[data-ds-dark-theme] .pI_x6G_centerCol { text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+
+/* 重点文字再加重: 会话标题/状态栏/模式标签 */
+body .pI_x6G_centerCol h1,
+body .pI_x6G_centerCol h2,
+body .pI_x6G_centerCol h3 { font-weight: 700; }
