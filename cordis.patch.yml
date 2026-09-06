@@ -1,0 +1,6 @@
+# dsh bundle layer: mount the glass theme package so its web client
+# (client.js) is served through the /plugins endpoint. Pure client-side
+# skin: no server behavior.
+- insert:
+    - id: dsh-glass-theme
+      name: 'dsh-glass-theme'
