@@ -26,7 +26,9 @@ const wallpaperCss = `
 .dsh-glass-theme-wp-host [class*="Y0dWHa_split"],
 .dsh-glass-theme-wp-host [class*="Y0dWHa_table"],
 .dsh-glass-theme-wp-host [class*="fV0t5q_root"],
-.dsh-glass-theme-wp-host [class*="1p9O6q_plot"] { background: transparent; }
+.dsh-glass-theme-wp-host [class*="fV0t5q_search"],
+.dsh-glass-theme-wp-host [class*="1p9O6q_plot"],
+.dsh-glass-theme-wp-host [class*="Y0dWHa_kindTag"] { background: transparent; }
 .dsh-glass-theme-wallpaper { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
 .dsh-glass-theme-wallpaper > img,
 .dsh-glass-theme-wallpaper > video { width: 100%; height: 100%; object-fit: cover; display: block; }
