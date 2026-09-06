@@ -78,8 +78,12 @@ hash, 通常仍会生效。
 - **挂载**: 聊天列加 `dsh-glass-theme-wp-host` 类 (relative + isolate),
   内部追加 `z-index:-1` 的壁纸层; `object-fit: cover` 自动裁剪,
   尺寸全为百分比 (缩放零修正);
-- `wSkVaW_root` 是聊天视图自带的不透明白底, 壁纸激活时在宿主范围内
-  置为透明; 规则限定在 host 类之下, hash 漂移只会失效不会误伤;
+- `wSkVaW_root` 是聊天视图自带的不透明白底、`wSkVaW_composerSeat`
+  是输入框底座的"透明→白"渐变; 壁纸激活时在宿主范围内均置为透明
+  (composerSeat 由 JS 清内联 background-image, React 重绘后看门狗会
+  补清); 规则限定在 host 类之下, hash 漂移只会失效不会误伤;
+- **视频播放兜底**: 每 1s 重试 play() 共 30 次, 防个别环境静音自动
+  播放未生效;
 - scrim 自动明暗 (浅色 0.30 白 / 深色 0.38 黑) 保证文字可读;
 - **视频播放策略**: 静音起播 (浏览器永远允许) → playing 后若页面有过
   用户交互则放开声音, 被拦自动回退静音 → pointerdown/keydown 兜底放开;

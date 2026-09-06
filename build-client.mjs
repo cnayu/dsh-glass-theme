@@ -21,6 +21,7 @@ const css = readFileSync(join(here, 'soft-glass.css'), 'utf8');
 const wallpaperCss = `
 .dsh-glass-theme-wp-host { position: relative; isolation: isolate; }
 .dsh-glass-theme-wp-host [class*="wSkVaW_root"] { background: transparent; }
+.dsh-glass-theme-wp-host [class*="wSkVaW_composerSeat"] { background: transparent; }
 .dsh-glass-theme-wallpaper { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
 .dsh-glass-theme-wallpaper > img,
 .dsh-glass-theme-wallpaper > video { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -130,6 +131,22 @@ const client = `window.__ModuleLoader__.load({
       window.addEventListener("keydown", keepPlaying, true);
       var p = el.play();
       if (p && p.catch) p.catch(function () {});
+      // Some environments start paused despite the autoplay attribute; retry.
+      var playTries = 0;
+      var playTimer = setInterval(function () {
+        playTries += 1;
+        if (playTries > 30 || !el.isConnected) { clearInterval(playTimer); return; }
+        if (el.paused) { var pp = el.play(); if (pp && pp.catch) pp.catch(function () {}); }
+      }, 1000);
+    }
+
+    /* The composer seat paints a transparent-to-white gradient over the
+       bottom of the chat column (behind the input card and the status bar);
+       clear it so the wallpaper reaches the input area. React may restore it
+       on re-render, so the watchdog re-clears as well. */
+    function clearComposerSeat() {
+      var seat = document.querySelector('[class*="wSkVaW_composerSeat"]');
+      if (seat && seat.style.backgroundImage !== "none") seat.style.backgroundImage = "none";
     }
 
     function mountWallpaper(rec) {
@@ -162,6 +179,7 @@ const client = `window.__ModuleLoader__.load({
       layer.appendChild(el);
       layer.appendChild(scrim);
       host.appendChild(layer);
+      clearComposerSeat();
       currentRec = rec;
     }
 
@@ -185,7 +203,8 @@ const client = `window.__ModuleLoader__.load({
         if (!currentRec) return;
         try {
           var host = findChatHost();
-          if (!host || !host.querySelector("." + WP_LAYER_CLASS)) mountWallpaper(currentRec);
+          if (!host || !host.querySelector("." + WP_LAYER_CLASS)) { mountWallpaper(currentRec); return; }
+          clearComposerSeat();
         } catch (e) {}
       };
       var obs = new MutationObserver(function () {
